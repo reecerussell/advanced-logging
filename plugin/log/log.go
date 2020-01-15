@@ -22,10 +22,5 @@ type Log struct {
 
 // Output writes to the Stderr output, with the default log package.
 func (l *Log) Output(opts map[string]interface{}) io.Writer {
-	prefix, ok := opts["prefix"]
-	if ok {
-		l.internal.SetPrefix(prefix.(string))
-	}
-
 	return l.internal.Writer()
 }

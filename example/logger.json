@@ -5,10 +5,7 @@
 	"plugins": [
 		{
 			"name": "log",
-			"enabled": false,
-			"config": {
-				"prefix": "[STD]"
-			}
+			"enabled": true
 		},
 		{
 			"name": "file",
