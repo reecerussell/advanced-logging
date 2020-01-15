@@ -7,7 +7,7 @@
 			"name": "log",
 			"enabled": false,
 			"config": {
-				"prefix": "Test: "
+				"prefix": "[STD]"
 			}
 		},
 		{
