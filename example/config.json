@@ -1,0 +1,21 @@
+{
+	"printPrefix": "INFO",
+	"panicPrefix": "CRASH",
+	"fatalPrefix": "ERROR",
+	"plugins": [
+		{
+			"name": "log",
+			"enabled": false,
+			"config": {
+				"prefix": "Test: "
+			}
+		},
+		{
+			"name": "file",
+			"enabled": true,
+			"config": {
+				"outputDir": "logs"
+			}
+		}
+	]
+}

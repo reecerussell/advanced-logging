@@ -1,0 +1,15 @@
+Hello world 2
+Hello world 2
+Hello World!
+Hello World!
+Hello World!
+[PRINT][%!s(int=2020)-January-%!s(int=15)][17:6:58.762057]Hello World!
+[PANIC][%!s(int=2020)-January-%!s(int=15)][17:6:58.762057]Hello World!
+[PRINT][15-1-2020][17:8:7.320076]Hello World!
+[PRINT][15-1-2020][17:8:21.652592]Hello World!
+[PRINT][15-1-2020][17:8:25.797292] Hello World!
+[PRINT][15-January-2020][17:8:46.398977] Hello World!
+[INFO][15-January-2020][17:17:5.971883] Hello World!
+[INFO][15-January-2020][17:17:14.595376] Hello World!
+[INFO][15-January-2020][17:17:24.415435] Hello World!
+[INFO][15-January-2020][17:17:27.684952] Hello World!
