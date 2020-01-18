@@ -18,14 +18,18 @@ func init() {
 	})
 }
 
+// File is a plugin which writes logs to a physical file.
 type File struct {
 	mu sync.Mutex
 }
 
+// Output is the method used by the logger to instansiate the
+// plugin. A io.Writer is returned, which is used to write to the file.
 func (f *File) Output(opts map[string]interface{}) io.Writer {
 	f.mu.Lock()
 	defer f.mu.Unlock()
 
+	// Read output directory from config.
 	dir := opts["outputDir"].(string)
 
 	// Ensure output directory exists.
@@ -34,6 +38,7 @@ func (f *File) Output(opts map[string]interface{}) io.Writer {
 		panic(err)
 	}
 
+	// Get the file.
 	file, err := writeFile(dir)
 	if err != nil {
 		panic(err)
@@ -42,6 +47,9 @@ func (f *File) Output(opts map[string]interface{}) io.Writer {
 	return file
 }
 
+// writeFile returns a file which can be written to. This is
+// either a newly created file, or an existing file that
+// has been opened.
 func writeFile(dir string) (*os.File, error) {
 	now := time.Now()
 	filename := fmt.Sprintf("log_%d%d%d.txt", now.Year(), now.Month(), now.Day())
@@ -50,6 +58,8 @@ func writeFile(dir string) (*os.File, error) {
 	return os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, os.ModePerm)
 }
 
+// createDirectory ensures the output directory exists, and
+// if not, creates it.
 func createDirectory(dir string) error {
 	dir = strings.TrimSpace(dir)
 	if dir == "" {
