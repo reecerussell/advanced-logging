@@ -1,10 +1,7 @@
 package log
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"os"
 
 	"github.com/reecerussell/advanced-logging/config"
 	"github.com/reecerussell/advanced-logging/logger"
@@ -14,53 +11,88 @@ import (
 	_ "github.com/reecerussell/advanced-logging/plugin/log"
 )
 
-const (
-	defaultConfigFilePath  = "logger.json"
-	configFilePathVariable = "LOGGER_CONFIG"
-)
-
 var (
-	configuration *config.Configuration
-	defaultLogger *logger.Logger
+	// DefaultLogger is the default output used to
+	// write log data. This is initialised using
+	// configuration found in a config file.
+	DefaultLogger *logger.Logger
 )
 
 func init() {
-	bytes, err := ioutil.ReadFile(
-		getVariableOrDefault(configFilePathVariable, defaultConfigFilePath))
+	// Read config.
+	c, err := config.ReadFromFile()
 	if err != nil {
 		panic(err)
 	}
 
-	var configuration config.Configuration
-	_ = json.Unmarshal(bytes, &configuration)
-
-	l, err := logger.NewLogger(&configuration)
+	// Init default logger.
+	l, err := logger.NewLogger(c)
 	if err != nil {
 		panic(err)
 	}
 
-	defaultLogger = l
+	DefaultLogger = l
 }
 
 // returns the default logger.
 func mustUseDefaultLogger() *logger.Logger {
-	if defaultLogger == nil {
+	if DefaultLogger == nil {
 		panic(fmt.Errorf("cannot use default logger is it has not be assigned"))
 	}
 
-	return defaultLogger
+	return DefaultLogger
 }
 
+// Print methods
+
+// Print calls Print() on the default logger. Arguments
+// are handled in the manner of fmt.Print.
 func Print(v ...interface{}) {
 	mustUseDefaultLogger().Print(v...)
 }
 
-// returns the value of an environment variable. If the environment variable
-// has no data, the defaultValue is returned.
-func getVariableOrDefault(name, defaultValue string) string {
-	if v := os.Getenv(name); v != "" {
-		return v
-	}
+// Printf calls Printf() on the default logger. Arguments
+// are handled in the manner of fmt.Printf.
+func Printf(format string, v ...interface{}) {
+	mustUseDefaultLogger().Printf(format, v...)
+}
 
-	return defaultValue
+// Println calls Println() on the default logger. Arguments
+// are handled in the manner of fmt.Println.
+func Println(v ...interface{}) {
+	mustUseDefaultLogger().Println(v...)
+}
+
+// Panic methods
+
+// Panic is equivalent to Print() followed by a call to panic().
+func Panic(v ...interface{}) {
+	mustUseDefaultLogger().Panic(v...)
+}
+
+// Panicf is equivalent to Printf() followed by a call to panic().
+func Panicf(format string, v ...interface{}) {
+	mustUseDefaultLogger().Panicf(format, v...)
+}
+
+// Panicln is equivalent to Println() followed by a call to panic().
+func Panicln(v ...interface{}) {
+	mustUseDefaultLogger().Panicln(v...)
+}
+
+// Fatal methods
+
+// Fatal is equivalent to Print() followed by a call to os.Exit(1).
+func Fatal(v ...interface{}) {
+	mustUseDefaultLogger().Fatal(v...)
+}
+
+// Fatalf is equivalent to Printf() followed by a call to os.Exit(1).
+func Fatalf(format string, v ...interface{}) {
+	mustUseDefaultLogger().Fatalf(format, v...)
+}
+
+// Fatalln is equivalent to Println() followed by a call to os.Exit(1).
+func Fatalln(v ...interface{}) {
+	mustUseDefaultLogger().Fatalln(v...)
 }
