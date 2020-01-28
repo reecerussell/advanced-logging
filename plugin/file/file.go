@@ -51,11 +51,32 @@ func (f *File) Output(opts map[string]interface{}) io.Writer {
 // either a newly created file, or an existing file that
 // has been opened.
 func writeFile(dir string) (*os.File, error) {
-	now := time.Now()
-	filename := fmt.Sprintf("log_%d%d%d.txt", now.Year(), now.Month(), now.Day())
-	filename = path.Join(dir, filename)
+	for i := 0; true; i++ {
+		now := time.Now()
 
-	return os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, os.ModePerm)
+		filename := fmt.Sprintf("log_%d%d%d.txt", now.Year(), now.Month(), now.Day())
+		filename = path.Join(dir, filename)
+
+		if i > 0 {
+			filename = fmt.Sprintf("%s_%d", filename, i)
+		}
+
+		file, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, os.ModePerm)
+		if err != nil {
+			return nil, err
+		}
+
+		stats, err := file.Stat()
+		if err != nil {
+			return nil, err
+		}
+
+		if stats.Size() <= 10^5 {
+			return file, nil
+		}
+	}
+
+	return nil, nil
 }
 
 // createDirectory ensures the output directory exists, and
