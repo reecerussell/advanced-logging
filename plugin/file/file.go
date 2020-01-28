@@ -54,14 +54,15 @@ func writeFile(dir string) (*os.File, error) {
 	for i := 0; true; i++ {
 		now := time.Now()
 
-		filename := fmt.Sprintf("log_%d%d%d.txt", now.Year(), now.Month(), now.Day())
-		filename = path.Join(dir, filename)
+		var filename string
 
 		if i > 0 {
-			filename = fmt.Sprintf("%s_%d", filename, i)
+			filename = fmt.Sprintf("log_%d%d%d_%d.txt", now.Year(), now.Month(), now.Day(), i)
+		} else {
+			filename = fmt.Sprintf("log_%d%d%d.txt", now.Year(), now.Month(), now.Day())
 		}
 
-		file, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, os.ModePerm)
+		file, err := os.OpenFile(path.Join(dir, filename), os.O_APPEND|os.O_CREATE|os.O_WRONLY, os.ModePerm)
 		if err != nil {
 			return nil, err
 		}
