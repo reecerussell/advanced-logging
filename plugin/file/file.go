@@ -72,7 +72,7 @@ func writeFile(dir string) (*os.File, error) {
 			return nil, err
 		}
 
-		if stats.Size() <= 10^5 {
+		if stats.Size() <= 100000 {
 			return file, nil
 		}
 	}
